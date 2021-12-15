@@ -10,10 +10,13 @@ import {
     UserGreeting,
     UserName,
     Icon,
-    HighLightCards
+    HighLightCards,
+    Transactions,
+    Title
 } from './styles';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { HighLightCard } from '../../components/HighLightCard';
+import { TransactionCard } from '../../components/TransactionCard';
 
 export const Dashboard = () => {
     return (
@@ -47,6 +50,10 @@ export const Dashboard = () => {
                   amount="17.000,00"
                   lastTransaction="Última transação foi 10 de dezembro"/>
             </HighLightCards>
+            <Transactions>
+                <Title>Listagem</Title>
+                <TransactionCard />
+            </Transactions>
         </Container>
     )
 }
