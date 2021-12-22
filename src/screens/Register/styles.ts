@@ -43,3 +43,19 @@ export const TransactionTypes = styled.View`
 `;
 
 
+export const ButtonEnviar = styled.TouchableOpacity`
+    width: 100%;
+    background-color:${({theme}) => theme.colors.secundary};
+    padding:18px;
+    border-radius:5px;
+    align-items:center;
+`;
+
+export const ButtonText = styled.Text`
+    font-family:${({theme}) => theme.fonts.medium};
+    font-size:${RFValue(14)}px;
+
+    color:${({theme}) => theme.colors.shape};  
+`;
+
+
