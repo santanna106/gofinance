@@ -13,8 +13,5 @@ export const Title = styled.Text`
     font-family:${({theme}) => theme.fonts.medium};
     font-size:${RFValue(14)}px;
 
-    color:${({theme}) => theme.colors.shape};
-
-    
-    
+    color:${({theme}) => theme.colors.shape};  
 `;
