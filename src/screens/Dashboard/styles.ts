@@ -8,7 +8,7 @@ import {Feather} from '@expo/vector-icons';
 import {getStatusBarHeight} from 'react-native-iphone-x-helper';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 
-import {DataListProps} from '.';
+import {DataListProps} from './index';
 
 export const Container = styled.SafeAreaView`
     flex:1;

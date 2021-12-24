@@ -108,10 +108,10 @@ export const Dashboard = () => {
             </HighLightCards>
             <Transactions>
                 <Title>Listagem</Title>
-                <TransactionList
+                <TransactionList<DataListProps|any>
                     data={data}
-                    keyExtractor={item =>item.id }
-                    renderItem={({item}) => <TransactionCard data={item}/>}
+                    keyExtractor={(item:DataListProps) =>item.id }
+                    renderItem={(item:DataListProps) => <TransactionCard data={item}/>}
                 />
                 
             </Transactions>
