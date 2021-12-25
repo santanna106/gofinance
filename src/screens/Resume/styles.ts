@@ -21,14 +21,17 @@ export const Title = styled.Text`
     color: ${({theme}) => theme.colors.shape}
 `;
 
-export const Content = styled.ScrollView.attrs({
-    contentContainerStyle:{flex:1,padding:24}
-})`
+export const Content = styled.ScrollView`
 
 `;
 
 export const LoadContainer = styled.View`
     flex:1;
     justify-content:center;
+    align-items:center;
+`;
+
+export const ChartContainer = styled.View`
+    width:100%;
     align-items:center;
 `;
