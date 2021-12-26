@@ -3,6 +3,7 @@ import 'intl/locale-data/jsonp/pt-BR';
 import React from 'react';
 import AppLoading from 'expo-app-loading';
 import {ThemeProvider} from 'styled-components';
+import {StatusBar} from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
 
@@ -16,6 +17,7 @@ import {
 
 import theme from './src/global/styles/theme'
 import {AppRoutes} from './src/routes/app.routes';
+import {SignIn} from './src/screens/SignIn';
 
 
 
@@ -33,7 +35,8 @@ export default function App() {
   return (  
     <ThemeProvider theme={theme}>
       <NavigationContainer>
-        <AppRoutes/>
+        <StatusBar barStyle="light-content" />
+        <SignIn/>
       </NavigationContainer>
     </ThemeProvider>
   );

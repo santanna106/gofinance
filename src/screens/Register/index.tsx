@@ -50,7 +50,7 @@ const schema = Yup.object().shape({
         .number()
         .typeError('Informe um valor numérico')
         .positive('O valor deve ser positivo')
-        .required('O preço é obrigatório')
+        .required('O valor é obrigatório')
 })
 
 const dataKey = '@gofinance:transactions';

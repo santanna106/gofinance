@@ -1,10 +1,12 @@
-import React,{useEffect,useState,useCallback} from 'react';
+import React,{useState,useCallback} from 'react';
 import {ActivityIndicator, Alert, ScrollView} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {VictoryPie} from 'victory-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-
+import {addMonths,subMonths,format} from 'date-fns';
+import {ptBR} from 'date-fns/locale';
+ 
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useTheme} from 'styled-components';
 
@@ -14,7 +16,11 @@ import {
     Title,
     Content,
     LoadContainer,
-    ChartContainer
+    ChartContainer,
+    MonthSelect,
+    MonthSelectButton,
+    Month,
+    MonthSelectIcon
 } from './styles';
 
 import { HistoryCard } from '../../components/HistoryCard';
@@ -41,11 +47,20 @@ interface CategoryData{
 const dataKey = '@gofinance:transactions';
 
 export function Resume(){
-    const [loading,setLoading] = useState(true);
+    const [selectedDate,setSelectedDate] = useState(new Date());
+    const [loading,setLoading] = useState(false);
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
 
     
    const theme = useTheme();
+
+   function handleChangeDate(action:'next' | 'prev') {
+           if(action === 'next'){
+            setSelectedDate(addMonths(selectedDate,1));    
+           } else {
+            setSelectedDate(subMonths(selectedDate,1));    
+           }
+   }
 
     async function loadData(){       
             setLoading(true);    
@@ -54,7 +69,12 @@ export function Resume(){
 
 
             const expensives = responseFormatted
-                              .filter((expensive:TransactionData) => expensive.type === 'negative');
+                              .filter((expensive:TransactionData) => 
+                                expensive.type === 'negative' && 
+                                new Date(expensive.date).getMonth() === selectedDate.getMonth() &&
+                                new Date(expensive.date).getFullYear() === selectedDate.getFullYear()
+                              
+                              );
 
             const expensivesTotal = expensives.reduce((accumulator:number,expensive:TransactionData) => {
                 return accumulator + Number(expensive.amount);
@@ -93,26 +113,24 @@ export function Resume(){
             setTotalByCategories(totalByCategory);
             setLoading(false);
     }
-    useEffect(()=>{
-        loadData();
-    },[])
 
     useFocusEffect(useCallback(() => {
         loadData();
-     },[]));
+     },[selectedDate]));
 
 
     return (
         <Container>
+            <Header>
+                 <Title>Resumo</Title>
+             </Header>
             {
+               
                   loading ? <LoadContainer>
                                 <ActivityIndicator color={theme.colors.primary} size="large" />
                             </LoadContainer>
                     : 
                     <>
-                        <Header>
-                            <Title>Resumo</Title>
-                        </Header>
                         <Content
                             showsVerticalScrollIndicator={false}
                             contentContainerStyle={{
@@ -120,6 +138,15 @@ export function Resume(){
                                 paddingBottom:useBottomTabBarHeight(),
                             }}
                         >
+                           <MonthSelect>
+                               <MonthSelectButton onPress={() => handleChangeDate('prev')}>
+                                   <MonthSelectIcon name="chevron-left" />
+                               </MonthSelectButton>
+                               <Month>{format(selectedDate,'MMMM, yyyy',{locale:ptBR})}</Month>
+                               <MonthSelectButton onPress={() => handleChangeDate('next')}>
+                                   <MonthSelectIcon name="chevron-right" />
+                               </MonthSelectButton>
+                           </MonthSelect>
                            <ChartContainer>
                             <VictoryPie
                                     data={totalByCategories}
