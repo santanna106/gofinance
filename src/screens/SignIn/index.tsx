@@ -1,4 +1,7 @@
-import React,{useContext} from 'react';
+import 
+    React,
+    {useContext} 
+from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import {Alert} from 'react-native';
 import AppleSvg from '../../assets/apple.svg';

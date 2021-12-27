@@ -1,5 +1,11 @@
-import React, { ReactNode,createContext, useContext } from 'react';
-import AuthSession from 'expo-auth-session';
+import React,
+    {
+        ReactNode,
+        createContext,
+        useContext,
+        useState
+     } from 'react';
+import * as AuthSession from 'expo-auth-session';
 
 interface AuthProviderProps {
     children: ReactNode;
@@ -17,27 +23,36 @@ interface IAuthContextData {
     signInWithGoogle(): Promise<void>;
 }
 
+interface AuthorizationResponse {
+    params: {
+        access_token:string;   
+    },
+    type:string;
+}
+
 const AuthContext = createContext({} as IAuthContextData);
 
 function AuthProvider({children}:AuthProviderProps){
-    const user = {
-        id: 'e2131231',
-        name:'Gabriel Andrade',
-        email:'gabriel.satna@gmail.com'
-    }
+    const [user,setUser] = useState<User>({} as User); 
 
     async function signInWithGoogle(){
         try{
             const CLIENT_ID='1016420575854-ma0u6sn0vsemirkga2dvgojam0q6ro7o.apps.googleusercontent.com';
-            const REDIRECT_URI='https://auth.expo.io/@gabriel.ensinoeaprendizado/gofinance';
+            
+            const REDIRECT_URI='https://auth.expo.io/@gabriel.ensinoeaprendizado/gofinances';
             const RESONSE_TYPE='token';
             const SCOPE=encodeURI('profile email');
 
-            const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESONSE_TYPE}&scope=${SCOPE}`;
-            console.log(authUrl);
-            const response = await AuthSession.startAsync({authUrl});
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESONSE_TYPE}&scope=${SCOPE}`;
+            const {type,params} = await AuthSession
+                .startAsync({authUrl}) as AuthorizationResponse;
 
-            console.log("Response",response);
+            if(type === 'success'){
+                const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`);
+                const userInfo = await response.json();
+                console.log(userInfo);
+            }
+            
         }catch (error){
             throw new Error(error as string);
         }
