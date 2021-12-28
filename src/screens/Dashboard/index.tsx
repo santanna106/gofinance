@@ -4,6 +4,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {useTheme} from 'styled-components';
+import {useAuth} from '../../hooks/auth';
 
 import {formataData} from '../../utils/dataFormat';
 import {
@@ -27,6 +28,7 @@ import {
 import { HighLightCard } from '../../components/HighLightCard';
 import { TransactionCard,TransactionCardProps } from '../../components/TransactionCard';
 
+
 export interface DataListProps extends TransactionCardProps{
     id:string;
 }
@@ -49,6 +51,7 @@ export const Dashboard = () => {
    const [loading,setLoading] = useState(true);
 
    const theme = useTheme();
+   const {user,signOut} = useAuth();
 
    function getLastTransaction(collection:DataListProps[],type:'positive'|'negative'){
  
@@ -57,11 +60,7 @@ export const Dashboard = () => {
         Math.max.apply(Math,collection
         .filter(transaction => transaction.type === type)
         .map(transaction => new Date(formataData(transaction.date)).getTime())));
-
-        
         return `${lastTransactions.getDate()} de ${lastTransactions.toLocaleString('pt-BR',{month:'long'})}`  
-
-
     }
 
    async function loadTransaction(){
@@ -165,13 +164,13 @@ export const Dashboard = () => {
                     <Header>
                         <UserWrapper>
                             <UserInfo>
-                                <Photo source={{uri:'https://avatars.githubusercontent.com/u/10618397?v=4'}}/>
+                                <Photo source={{uri:user?.photo}}/>
                                 <User>
                                     <UserGreeting>Olá,</UserGreeting>
-                                    <UserName>Gabriel</UserName>
+                                    <UserName>{user.name}</UserName>
                                 </User>
                             </UserInfo>
-                            <LogoutButton onPress={() => {}}>
+                            <LogoutButton onPress={signOut}>
                                 <Icon name="power"/>
                             </LogoutButton>
                         </UserWrapper>

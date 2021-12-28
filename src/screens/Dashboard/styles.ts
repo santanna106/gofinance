@@ -1,8 +1,7 @@
 
 
 import styled from 'styled-components/native';
-import {FlatList} from 'react-native';
-import {BorderlessButton} from 'react-native-gesture-handler';
+import {FlatList,TouchableOpacity} from 'react-native';
 import {RFPercentage,RFValue} from 'react-native-responsive-fontsize';
 import {Feather} from '@expo/vector-icons';
 import {getStatusBarHeight} from 'react-native-iphone-x-helper';
@@ -63,7 +62,7 @@ export const UserName = styled.Text`
 `;
 
 
-export const LogoutButton = styled(BorderlessButton)`
+export const LogoutButton = styled(TouchableOpacity)`
 `;
 
 export const Icon = styled(Feather)`
