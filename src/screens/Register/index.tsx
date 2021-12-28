@@ -18,6 +18,7 @@ import {
 } from '@react-navigation/native';
 
 import {useForm} from 'react-hook-form';
+import { useAuth } from '../../hooks/auth';
 
 
 import { InputForm } from '../../components/Forms/InputForm';
@@ -37,6 +38,7 @@ import {
     ButtonText
 } from './styles';
 
+
 interface FormData {
     name:string;
     amount: string;
@@ -53,7 +55,7 @@ const schema = Yup.object().shape({
         .required('O valor é obrigatório')
 })
 
-const dataKey = '@gofinance:transactions';
+
 
 export function Register () {
     const [category,setCategory] = useState({
@@ -62,6 +64,9 @@ export function Register () {
     });
     const [transactionType,setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
+    const {user} = useAuth();
+
+   
 
     const { navigate }: NavigationProp<ParamListBase> = useNavigation();
    
@@ -105,7 +110,7 @@ export function Register () {
         
 
         try {
-            
+            const dataKey = `@gofinance:transactions_user:${user.id}`;
             const data = await AsyncStorage.getItem(dataKey);
             const currentData = data ? JSON.parse(data) : [];
 

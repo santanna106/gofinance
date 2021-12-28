@@ -9,6 +9,8 @@ import {ptBR} from 'date-fns/locale';
  
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useTheme} from 'styled-components';
+import { useAuth } from '../../hooks/auth';
+
 
 import {
     Container,
@@ -44,12 +46,15 @@ interface CategoryData{
     percent:string;
 }
 
-const dataKey = '@gofinance:transactions';
+
 
 export function Resume(){
     const [selectedDate,setSelectedDate] = useState(new Date());
     const [loading,setLoading] = useState(false);
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
+    const {user} = useAuth();
+
+    const dataKey = `@gofinance:transactions_user:${user.id}`;
 
     
    const theme = useTheme();

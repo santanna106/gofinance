@@ -33,8 +33,6 @@ export interface DataListProps extends TransactionCardProps{
     id:string;
 }
 
-const dataKey = '@gofinance:transactions';
-
 interface HighLightProps {
     amount:string;
     lastTransaction:string;
@@ -52,19 +50,29 @@ export const Dashboard = () => {
 
    const theme = useTheme();
    const {user,signOut} = useAuth();
+  
 
    function getLastTransaction(collection:DataListProps[],type:'positive'|'negative'){
  
-   
+    const collectionFiltred = collection
+    .filter(transaction => transaction.type === type)
+
+    console.log('collectionFiltred' , JSON.stringify(collectionFiltred,null,2))
+
+    if(collectionFiltred.length === 0 ){
+        return 0
+    }
+    
     const lastTransactions = new Date(
-        Math.max.apply(Math,collection
-        .filter(transaction => transaction.type === type)
-        .map(transaction => new Date(formataData(transaction.date)).getTime())));
+        Math.max.apply(Math,collectionFiltred
+        .map(transaction => new Date(transaction.date).getTime())));
         return `${lastTransactions.getDate()} de ${lastTransactions.toLocaleString('pt-BR',{month:'long'})}`  
     }
 
    async function loadTransaction(){
         setLoading(true);
+        const dataKey = `@gofinance:transactions_user:${user.id}`;
+       
         const response =  await AsyncStorage.getItem(dataKey);
         const transaction = response ? JSON.parse(response) : [];
 
@@ -107,9 +115,11 @@ export const Dashboard = () => {
 
             setTransactions(transactionsFormatted);
            
-            const lastTransactionEntries = getLastTransaction(transactions,'positive');              
-            const lastTransactionExpensive = getLastTransaction(transactions,'negative');  
-            const totalInterval = `01 a ${lastTransactionExpensive}`;       
+            const lastTransactionEntries =  getLastTransaction(transaction,'positive');              
+            const lastTransactionExpensive =  getLastTransaction(transaction,'negative');  
+            const totalInterval = lastTransactionExpensive === 0
+            ? 'Não há transações' 
+            : `01 a ${lastTransactionExpensive}`;       
 
             let total = entriesTotal - expensiveTotal;
 
@@ -120,7 +130,7 @@ export const Dashboard = () => {
                               style:'currency',
                               currency:'BRL'
                           }),
-                    lastTransaction:`Última entrada dia ${lastTransactionEntries}`
+                    lastTransaction:lastTransactionEntries === 0 ? 'Não há transações' : `Última entrada dia ${lastTransactionEntries}` 
                 },
                 expensives:{
                     amount:expensiveTotal
@@ -128,7 +138,7 @@ export const Dashboard = () => {
                             style:'currency',
                             currency:'BRL'
                            }),
-                    lastTransaction:`Última saída dia ${lastTransactionExpensive}`
+                    lastTransaction:lastTransactionExpensive === 0 ? 'Não há transações' : `Última entrada dia ${lastTransactionExpensive}` 
                 },
                 total: {
                     amount:total
