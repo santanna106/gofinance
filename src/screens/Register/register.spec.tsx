@@ -11,9 +11,15 @@ const Providers: React.FC = ({ children }) => (
   </ThemeProvider>
 );
 
+jest.mock('@react-navigation/native', () => {
+  return {
+    useNavigation: jest.fn()
+  }
+})
+
 describe('Register Screen', () => {
   it('should be open category modal when user click on button',  () => {
-    const { debug,getByTestId } = render(
+    const { getByTestId } = render(
       <Register />,
       {
         wrapper: Providers
@@ -28,6 +34,6 @@ describe('Register Screen', () => {
 
     
     expect(categoryModal.props.visible).toBeTruthy();
-    debug();
+    
   });
 }); 

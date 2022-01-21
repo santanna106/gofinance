@@ -68,7 +68,7 @@ export function Register () {
 
    
 
-    const { navigate }: NavigationProp<ParamListBase> = useNavigation();
+   // const { navigate }: NavigationProp<ParamListBase> = useNavigation();
    
     const { 
         control,
@@ -125,7 +125,7 @@ export function Register () {
             setTransactionType('');
             setCategory({key:'category',name:'Categoria'});
 
-            navigate("Listagem"); 
+           // navigate("Listagem"); 
 
         } catch (error) {
             console.log(error);

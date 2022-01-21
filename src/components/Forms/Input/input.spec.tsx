@@ -11,6 +11,8 @@ const Providers: React.FC = ({ children }) => (
     </ThemeProvider>
 );
 
+
+
 describe('Component Input',() => {
     it('must have specific border color when active',()=>{
         const { getByTestId } = render(
